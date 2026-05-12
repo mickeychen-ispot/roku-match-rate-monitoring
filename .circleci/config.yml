@@ -1,0 +1,48 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@2.1.1
+
+workflows:
+  scheduled-run:
+    triggers:
+      - schedule:
+          cron: "0 14 * * *"  # Daily at 14:00 UTC (6am PST)
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - run-script:
+          context:
+            - QA_AUTOMATION
+
+  manual-run:
+    jobs:
+      - run-script:
+          context:
+            - QA_AUTOMATION
+          filters:
+            branches:
+              only:
+                - main
+
+jobs:
+  run-script:
+    resource_class: ispot-main/prod-medium
+    docker:
+      - image: cimg/python:3.11.0
+    steps:
+      - checkout
+      - run:
+          name: Update PATH
+          command: |
+            echo 'export PATH=/usr/local/bin:$PATH' >> $BASH_ENV
+            source $BASH_ENV
+      - python/install-packages:
+          pkg-manager: pip
+          include-python-in-cache-key: false
+      - run:
+          name: Run script
+          command: python3 main.py
+          no_output_timeout: 1h

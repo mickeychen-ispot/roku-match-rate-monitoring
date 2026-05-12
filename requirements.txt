@@ -1,0 +1,5 @@
+git+https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/ispot-main/framework_test.git@v3
+snowflake-connector-python==3.0.1
+pandas==1.5.3
+pyarrow==14.0.1
+redshift-connector
