@@ -29,7 +29,6 @@ workflows:
 
 jobs:
   run-script:
-    resource_class: ispot-main/prod-medium
     docker:
       - image: cimg/python:3.11.0
     steps:
